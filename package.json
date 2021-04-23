@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "svelte-media-query": "^1.0.0"
+  }
+}
