@@ -1,27 +1,50 @@
 <script>
+    import { fly } from "svelte/transition";
+    import { quadInOut } from "svelte/easing";
+
+    const DURATION = 400;
+    const DELAY = DURATION;
+    const X_TRANSLATION = 1000;
+    const Y_TRANSLATION = 0;
+    const OPACITY = 0;
+
+    function getTransitionParameters(isTransitioningIn) {
+        const parameters = {
+            duration: DURATION,
+            y: Y_TRANSLATION,
+            opacity: OPACITY,
+            easing: quadInOut
+        }
+        if (isTransitioningIn) {
+            parameters["x"] = X_TRANSLATION;
+            parameters["delay"] = DELAY;
+        } else {
+            parameters["x"] = -X_TRANSLATION;
+            parameters["delay"] = 0;
+        }
+        return parameters;
+    }
+
     export let skills;
     export let skillType;
-
-    function capitalize() {
-        return skillType.charAt(0).toUpperCase() + skillType.substring(1, skillType.length).toLowerCase();
-    }
 </script>
 
-<div class="skill-section" id="{skillType.toLowerCase()}">
-    <h3 class="skill-section-title">{capitalize()}</h3>
-    <div class="skill-icons">
-        {#each skills as skill}
-            <div class="skill-container">
-                <img class="skill-logo" src={skill.src} alt="Logo for {skill.name}" />
-                <span class="skill-name">{skill.name}</span>
-            </div>
-        {/each}
-    </div>
+<div
+    in:fly={getTransitionParameters(true)}
+    out:fly={getTransitionParameters(false)}
+    class="skill-section" 
+    id="{skillType.toLowerCase()}"
+    >
+    {#each skills as skill}
+        <div class="skill-container">
+            <img class="skill-logo" src="./assets/logos/{skill.src}" alt="Logo for {skill.name}" />
+            <span class="skill-name">{skill.name}</span>
+        </div>
+    {/each}
 </div>
 
 <style>
-
-    .skill-icons {
+    .skill-section {
         display: flex;
         max-width: 100%;
         flex-wrap: wrap;
@@ -48,10 +71,5 @@
         width: 85px;
         height: 85px;
         object-fit: contain;
-    }
-
-    .skill-section-title {
-        color: #50B2C0;
-        font-size: 32px;
     }
 </style>

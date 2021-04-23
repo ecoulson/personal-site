@@ -25,6 +25,7 @@
         grid-template-areas: 
             "about"
             "skills"
-            "experience";
+            "experience"
+            "contact";
     }
 </style>
